@@ -14,7 +14,10 @@ const Button = ({ handleClick, text }) => {
 
 const StatisticLine = ({ text, value }) => {
     return (
-        <p>{text} {value}</p>
+        <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+        </tr>
     )
 }
 
@@ -29,15 +32,19 @@ const Statistics = ({ reviews }) => {
 
     const averageScore = (((reviews.good * 1) + (reviews.bad * -1)) / totalFeedback).toFixed(2);
     const positiveFeedback = ((reviews.good / totalFeedback) * 100).toFixed(2);
-    
+
     return (
         <div>
-            <StatisticLine text="good" value={reviews.good} />
-            <StatisticLine text="neutral" value={reviews.neutral} />
-            <StatisticLine text="bad" value={reviews.bad} />
-            <StatisticLine text="all" value={totalFeedback} />
-            <StatisticLine text="average" value={averageScore} />
-            <StatisticLine text="positive" value={positiveFeedback + "%"} />
+            <table>
+                <tbody>
+                    <StatisticLine text="good" value={reviews.good} />
+                    <StatisticLine text="neutral" value={reviews.neutral} />
+                    <StatisticLine text="bad" value={reviews.bad} />
+                    <StatisticLine text="all" value={totalFeedback} />
+                    <StatisticLine text="average" value={averageScore} />
+                    <StatisticLine text="positive" value={positiveFeedback + "%"} />
+                </tbody>
+            </table>
         </div>
     )
 }
