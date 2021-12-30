@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Entry = ({ name, phone }) => {
+const Entry = ({ name, number }) => {
     return (
-        <p>{name} {phone}</p>
+        <p>{name} {number}</p>
     )
 }
 

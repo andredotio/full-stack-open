@@ -5,13 +5,13 @@ const Catalog = ({ persons, filter, filteredPersons }) => {
     if (filter !== '') {
         return (
             filteredPersons.map(filteredPerson =>
-                <Entry key={filteredPerson.name} name={filteredPerson.name} phone={filteredPerson.number} />
+                <Entry key={filteredPerson.name} name={filteredPerson.name} number={filteredPerson.number} />
             )
         )
     } else {
         return (
             persons.map(person =>
-                <Entry key={person.name} name={person.name} phone={person.number} />
+                <Entry key={person.name} name={person.name} number={person.number} />
             )
         )
     }
