@@ -1,7 +1,7 @@
 import React from 'react'
 import Country from './Country'
 
-const Data = ({ filteredCountries }) => {
+const Data = ({ filteredCountries, setFilteredCountries }) => {
     if (filteredCountries.length === 1) {
         const filteredCountry = filteredCountries[0]
 
@@ -15,8 +15,10 @@ const Data = ({ filteredCountries }) => {
     } else {
         return (
             <div>
-                {filteredCountries.map((filteredCountry, i) =>
-                    <p key={i}>{filteredCountry.name.common}</p>
+                {filteredCountries.map((country, i) =>
+                    <p key={i}>
+                        {country.name.common} <button onClick={() => setFilteredCountries([country])}>show</button>
+                    </p>
                 )}
             </div>
         )
