@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './Button'
 
 
-const InputForm = ({ handlePersons, handleNewName, handleNewNumber }) => {
+const InputForm = ({ addPersons, handleNewName, handleNewNumber }) => {
     return (
         <form>
             <div>
@@ -12,7 +12,7 @@ const InputForm = ({ handlePersons, handleNewName, handleNewNumber }) => {
                 phone <input onChange={handleNewNumber} />
             </div>
             <div>
-                <Button handleClick={handlePersons} type="submit" text="add" />
+                <Button handleClick={addPersons} type='submit' text='add' />
             </div>
         </form>
     )

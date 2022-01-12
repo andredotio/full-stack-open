@@ -24,8 +24,7 @@ const App = () => {
 
         const newPerson = {
             name: newName,
-            number: newNumber,
-            id: persons.length + 1
+            number: newNumber
         }
 
         if (newName === '' || newNumber === '') {
@@ -48,6 +47,15 @@ const App = () => {
         }
     }
 
+    const removeFromPhonebook = (id, name) => {
+        const confirmRemoval = window.confirm(`Do you want to delete ${name} ?`)
+
+        if (confirmRemoval) {
+            personServices.remove(id)
+            setPersons(persons.filter((person) => person.id !== id))
+        }
+    }
+
     const updateName = (event) => {
         setNewName(event.target.value)
     }
@@ -67,9 +75,9 @@ const App = () => {
             <h2>Phonebook</h2>
             <Filter handleFilter={updateFilter} />
             <h3>Add new</h3>
-            <InputForm handlePersons={addToPhonebook} handleNewName={updateName} handleNewNumber={updateNumber} />
+            <InputForm addPersons={addToPhonebook} handleNewName={updateName} handleNewNumber={updateNumber} />
             <h3>Numbers</h3>
-            <Catalog persons={persons} filter={filter} filteredPersons={filteredPersons} />
+            <Catalog persons={persons} filter={filter} filteredPersons={filteredPersons} deletePersons={removeFromPhonebook} />
         </div>
     )
 }

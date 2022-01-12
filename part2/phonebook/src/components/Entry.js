@@ -1,8 +1,9 @@
 import React from 'react'
+import Button from './Button'
 
-const Entry = ({ name, number }) => {
+const Entry = ({ person, deletePersons }) => {
     return (
-        <p>{name} {number}</p>
+        <p>{person.name} {person.number} <Button handleClick={() => deletePersons(person.id, person.name)} text='delete' /></p>
     )
 }
 

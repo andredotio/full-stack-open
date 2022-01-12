@@ -19,7 +19,9 @@ const update = (id) => {
 }
 
 const remove = (id) => {
+    const request = axios.delete(`${base}/${id}`)
 
+    return request.then(response => response.data)
 }
 
 export default { getAll, create, update, remove }
