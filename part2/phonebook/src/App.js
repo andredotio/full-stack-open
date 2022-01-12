@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import InputForm from './components/InputForm'
 import Catalog from './components/Catalog'
 import Filter from './components/Filter'
+import personServices from './services/persons'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -12,11 +12,10 @@ const App = () => {
     const [filteredPersons, setFilteredPersons] = useState([])
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
-                console.log(response.data)
-                setPersons(response.data)
+        personServices
+            .getAll()
+            .then(initialPersons => {
+                setPersons(initialPersons)
             })
     }, [])
 
@@ -39,9 +38,13 @@ const App = () => {
             alert(`${newPerson.name} has already been added to the phonebook`)
             return
         } else {
-            setPersons(persons.concat(newPerson))
-            setNewName('')
-            setNewNumber('')
+            personServices
+                .create(newPerson)
+                .then(newPerson => {
+                    setPersons(persons.concat(newPerson))
+                    setNewName('')
+                    setNewNumber('')
+                })
         }
     }
 
@@ -66,7 +69,7 @@ const App = () => {
             <h3>Add new</h3>
             <InputForm handlePersons={addToPhonebook} handleNewName={updateName} handleNewNumber={updateNumber} />
             <h3>Numbers</h3>
-            <Catalog persons={persons} filter={filter} filteredPersons={filteredPersons}/>
+            <Catalog persons={persons} filter={filter} filteredPersons={filteredPersons} />
         </div>
     )
 }
