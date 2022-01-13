@@ -14,8 +14,10 @@ const create = (newPerson) => {
     return request.then(response => response.data)
 }
 
-const update = (id) => {
+const update = (newPerson) => {
+    const request = axios.put(`${base}/${newPerson.id}`, newPerson)
 
+    return request.then(request => request.data)
 }
 
 const remove = (id) => {

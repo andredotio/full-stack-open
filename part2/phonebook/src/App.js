@@ -10,12 +10,13 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
     const [filteredPersons, setFilteredPersons] = useState([])
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
         personServices
             .getAll()
-            .then(initialPersons => {
-                setPersons(initialPersons)
+            .then(response => {
+                setPersons(response)
             })
     }, [])
 
@@ -34,17 +35,27 @@ const App = () => {
         const newPersonExists = persons.some(person => person.name === newPerson.name)
 
         if (newPersonExists) {
-            alert(`${newPerson.name} has already been added to the phonebook`)
-            return
+            const confirmUpdate = window.confirm(`${newPerson.name} has already been added to the phonebook. Do you want to update their number ?`)
+
+            if (confirmUpdate) {
+                const person = persons.find(person => person.name === newPerson.name)
+                const updatedPerson = {...person, number: newNumber}
+
+                personServices
+                    .update(updatedPerson)
+                    .then(response => {
+                        setPersons(persons.map(person => person.id === response.id ? response : person))
+                    })
+            }
         } else {
             personServices
                 .create(newPerson)
-                .then(newPerson => {
-                    setPersons(persons.concat(newPerson))
-                    setNewName('')
-                    setNewNumber('')
+                .then(response => {
+                    setPersons(persons.concat(response))
                 })
         }
+        setNewName('')
+        setNewNumber('')
     }
 
     const removeFromPhonebook = (id, name) => {
