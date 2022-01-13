@@ -52,6 +52,9 @@ const App = () => {
                             setMessage(null)
                         }, 5000)
                     })
+                    .catch(error => {
+                        console.log(error.response.data)
+                    })
             }
         } else {
             personServices
@@ -72,7 +75,14 @@ const App = () => {
         const confirmRemoval = window.confirm(`Do you want to delete ${personToRemove.name} ?`)
 
         if (confirmRemoval) {
+            const removedPerson = personToRemove.name
+
             personServices.remove(personToRemove.id)
+            setMessage(`${removedPerson} has been removed from the phonebook.`)
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
+
             setPersons(persons.filter((person) => person.id !== personToRemove.id))
         }
     }
