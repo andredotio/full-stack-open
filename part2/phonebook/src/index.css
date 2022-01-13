@@ -1,0 +1,17 @@
+.added-updated-notif {
+    font-size: 32px;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: grey;
+    border: 2px solid green;
+    color: green;
+}
+
+.error-notif {
+    font-size: 32px;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: grey;
+    border: 2px solid red;
+    color: red;
+}

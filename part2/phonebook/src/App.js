@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import InputForm from './components/InputForm'
 import Catalog from './components/Catalog'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personServices from './services/persons'
+import './index.css'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -10,7 +12,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
     const [filteredPersons, setFilteredPersons] = useState([])
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState(null)
 
     useEffect(() => {
         personServices
@@ -39,31 +41,39 @@ const App = () => {
 
             if (confirmUpdate) {
                 const person = persons.find(person => person.name === newPerson.name)
-                const updatedPerson = {...person, number: newNumber}
+                const changedPerson = { ...person, number: newNumber }
 
                 personServices
-                    .update(updatedPerson)
-                    .then(response => {
-                        setPersons(persons.map(person => person.id === response.id ? response : person))
+                    .update(changedPerson)
+                    .then(updatedPerson => {
+                        setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+                        setMessage(`${updatedPerson.name}'s number has been updated.`)
+                        setTimeout(() => {
+                            setMessage(null)
+                        }, 5000)
                     })
             }
         } else {
             personServices
                 .create(newPerson)
-                .then(response => {
-                    setPersons(persons.concat(response))
+                .then(addedPerson => {
+                    setPersons(persons.concat(addedPerson))
+                    setMessage(`${addedPerson.name} has been added to the phonebook.`)
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
                 })
         }
         setNewName('')
         setNewNumber('')
     }
 
-    const removeFromPhonebook = (id, name) => {
-        const confirmRemoval = window.confirm(`Do you want to delete ${name} ?`)
+    const removeFromPhonebook = (personToRemove) => {
+        const confirmRemoval = window.confirm(`Do you want to delete ${personToRemove.name} ?`)
 
         if (confirmRemoval) {
-            personServices.remove(id)
-            setPersons(persons.filter((person) => person.id !== id))
+            personServices.remove(personToRemove.id)
+            setPersons(persons.filter((person) => person.id !== personToRemove.id))
         }
     }
 
@@ -84,6 +94,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={message} />
             <Filter handleFilter={updateFilter} />
             <h3>Add new</h3>
             <InputForm addPersons={addToPhonebook} handleNewName={updateName} handleNewNumber={updateNumber} />
