@@ -1,4 +1,3 @@
-const { response } = require('express')
 const express = require('express')
 const app = express()
 const PORT = 3001
@@ -50,11 +49,11 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
 
-app.delete('/api/persons/:id', (res, req) => {
+app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    const persons = persons.filter(person => person.id !== id)
+    persons = persons.filter(person => person.id !== id)
 
-    
+    res.status(204).end()
 })
 
 app.listen(PORT, () =>
