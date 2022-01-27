@@ -1,3 +1,4 @@
+const { response } = require('express')
 const express = require('express')
 const app = express()
 const PORT = 3001
@@ -36,6 +37,24 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+
+    if (person) {
+        res.json(person)
+    } else {
+        res.status(404).end()
+    }
+})
+
+app.delete('/api/persons/:id', (res, req) => {
+    const id = Number(req.params.id)
+    const persons = persons.filter(person => person.id !== id)
+
+    
 })
 
 app.listen(PORT, () =>
