@@ -1,0 +1,19 @@
+{
+  "name": "phonebook",
+  "version": "1.0.0",
+  "description": "Solution for the \"Phonebook\" exercise from Part 3 of Full Stack Open 2021",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
