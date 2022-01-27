@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 const PORT = 3001
 
 persons = [
@@ -25,6 +26,11 @@ persons = [
     }
 ]
 
+const generatedId = () => {
+    const MAX = 999999999
+    return Math.floor(Math.random() * MAX)
+}
+
 app.get('/', (req, res) => {
     res.send(`<h1>This server is running on PORT ${PORT}</h1>`)
 })
@@ -40,13 +46,25 @@ app.get('/api/persons', (req, res) => {
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
+    const personToGet = persons.find(person => person.id === id)
 
-    if (person) {
-        res.json(person)
+    if (personToGet) {
+        res.json(personToGet)
     } else {
         res.status(404).end()
     }
+})
+
+app.post('/api/persons', (req, res) => {
+    const newPerson = {
+        name: req.body.name,
+        number: req.body.number,
+        id: generatedId()
+    }
+
+    persons = persons.concat(newPerson)
+
+    res.json(newPerson)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
