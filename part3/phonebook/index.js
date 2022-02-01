@@ -1,7 +1,12 @@
 const express = require('express')
 const app = express()
-app.use(express.json())
+
+const morgan = require('morgan')
+
 const PORT = 3001
+
+app.use(express.json())
+
 
 persons = [
     {
@@ -31,20 +36,20 @@ const generatedId = () => {
     return Math.floor(Math.random() * MAX)
 }
 
-app.get('/', (req, res) => {
+app.get('/', morgan('tiny'), (req, res) => {
     res.send(`<h1>This server is running on PORT ${PORT}</h1>`)
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', morgan('tiny'), (req, res) => {
     const currentDate = new Date()
     res.send(`<p>Phonebook has info for ${persons.length} people</p>\n<p>${currentDate}</p>`)
 })
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', morgan('tiny'), (req, res) => {
     res.json(persons)
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', morgan('tiny'), (req, res) => {
     const id = Number(req.params.id)
     const personToGet = persons.find(person => person.id === id)
 
@@ -55,7 +60,7 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', morgan('tiny'), (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({
             error: 'name is missing'
@@ -87,7 +92,7 @@ app.post('/api/persons', (req, res) => {
     res.json(newPerson)
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', morgan('tiny'), (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
 
