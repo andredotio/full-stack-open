@@ -2,10 +2,12 @@ const express = require('express')
 const app = express()
 
 const morgan = require('morgan')
+morgan.token('body', (req) => JSON.stringify(req.body))
 
 const PORT = 3001
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
 persons = [
@@ -36,20 +38,20 @@ const generatedId = () => {
     return Math.floor(Math.random() * MAX)
 }
 
-app.get('/', morgan('tiny'), (req, res) => {
+app.get('/', (req, res) => {
     res.send(`<h1>This server is running on PORT ${PORT}</h1>`)
 })
 
-app.get('/info', morgan('tiny'), (req, res) => {
+app.get('/info', (req, res) => {
     const currentDate = new Date()
     res.send(`<p>Phonebook has info for ${persons.length} people</p>\n<p>${currentDate}</p>`)
 })
 
-app.get('/api/persons', morgan('tiny'), (req, res) => {
+app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
 
-app.get('/api/persons/:id', morgan('tiny'), (req, res) => {
+app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     const personToGet = persons.find(person => person.id === id)
 
@@ -60,7 +62,7 @@ app.get('/api/persons/:id', morgan('tiny'), (req, res) => {
     }
 })
 
-app.post('/api/persons', morgan('tiny'), (req, res) => {
+app.post('/api/persons', (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({
             error: 'name is missing'
@@ -92,7 +94,7 @@ app.post('/api/persons', morgan('tiny'), (req, res) => {
     res.json(newPerson)
 })
 
-app.delete('/api/persons/:id', morgan('tiny'), (req, res) => {
+app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
 
