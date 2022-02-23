@@ -1,19 +1,8 @@
 const listHelper = require('../utils/listHelper')
 
-describe('total likes', () => {
+describe('favourite blog', () => {
     const emptyList = []
     
-    const listWithOneBlog = [
-        {
-            _id: '5a422aa71b54a676234d17f8',
-            title: 'Go To Statement Considered Harmful',
-            author: 'Edsger W. Dijkstra',
-            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-            likes: 5,
-            __v: 0
-        }
-    ]
-
     const listWithMultipleBlogs = [
         {
             _id: "5a422a851b54a676234d17f7",
@@ -66,20 +55,18 @@ describe('total likes', () => {
     ]
 
     test('of empty list', () => {
-        const result = listHelper.totalLikes(emptyList)
-
-        expect(result).toBe(0)
-    })
-
-    test('of list that has only one blog to equal the likes of that blog', () => {
-        const result = listHelper.totalLikes(listWithOneBlog)
-
-        expect(result).toBe(5)
-    })
-
-    test('of list that has multiple blogs, to equal the sum of the likes of the blogs', () => {
-        const result = listHelper.totalLikes(listWithMultipleBlogs)
+        const result = listHelper.favouriteBlog(emptyList)
         
-        expect(result).toBe(36)
+        expect(result).toBe('The list is empty')
+    })
+
+    test('of list that has multiple blogs', () => {
+        const result = listHelper.favouriteBlog(listWithMultipleBlogs)
+
+        expect(result).toEqual({
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            likes: 12,
+        })
     })
 })
