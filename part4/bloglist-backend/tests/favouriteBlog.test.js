@@ -57,7 +57,7 @@ describe('favourite blog', () => {
     test('of empty list', () => {
         const result = listHelper.favouriteBlog(emptyList)
         
-        expect(result).toBe('The list is empty')
+        expect(result).toEqual({})
     })
 
     test('of list that has multiple blogs', () => {

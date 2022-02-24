@@ -18,7 +18,7 @@ const totalLikes = (blogs) => {
 
 const favouriteBlog = (blogs) => {
     if (blogs.length === 0) {
-        return 'The list is empty'
+        return {}
     }
 
     let index = 0
