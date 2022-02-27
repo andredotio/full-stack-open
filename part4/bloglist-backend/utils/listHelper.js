@@ -69,7 +69,32 @@ const mostBlogs = (blogs) => {
 }
 
 const mostLikes = (blogs) => {
-    // todo
+    if (blogs.length === 0) {
+        return {}
+    }
+
+    let index = 0;
+    let max = 0;
+
+    // returns an array of unique objects that conform to the following format: {author: someUniqueName, likes: 0}
+    const authors = [...new Map(blogs.map((blog) => [blog["author"], { author: blog.author, likes: 0 }])).values()]
+
+    for (let i = 0; i < authors.length; i++) {
+        for (let j = 0; j < blogs.length; j++) {
+            if (authors[i].author === blogs[j].author) {
+                authors[i].likes += blogs[j].likes
+            }
+        }
+    }
+
+    for (let i = 0; i < authors.length; i++) {
+        if (authors[i].likes > max) {
+            index = i
+            max = authors[i].likes
+        }
+    }
+
+    return authors[index]
 }
 
 module.exports = {
