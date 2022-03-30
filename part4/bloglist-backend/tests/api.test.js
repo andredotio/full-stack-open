@@ -3,16 +3,14 @@ const supertest = require('supertest')
 const blogHelper = require('../tests/testHelper')
 const app = require('../app')
 const Blog = require('../models/blog')
+const blog = require('../models/blog')
 
 const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
 
-    for (let blog of blogHelper.initialBlogs) {
-        let blogObject = new Blog(blog)
-        await blogObject.save()
-    }
+    await Blog.insertMany(blogHelper.initialBlogs)
 })
 
 describe('GET /', () => {
@@ -101,7 +99,25 @@ describe('PUT /:id', () => {
 })
 
 describe('DELETE /:id', () => {
-    // todo
+    test('returns a 204 status code when a blog is successfully deleted', async () => {
+        const blogsBeforeDeletion = await blogHelper.blogsInDb()
+        const blogToDelete = blogsBeforeDeletion[0]
+
+        const response = await api.delete(`/api/blogs/${blogToDelete.id}`)
+
+        expect(response.statusCode).toBe(204)
+    })
+
+    test('total number of blogs in the database is decreased by 1', async () => {
+        const blogsBeforeDeletion = await blogHelper.blogsInDb()
+        const blogToDelete = blogsBeforeDeletion[0]
+
+        await api.delete(`/api/blogs/${blogToDelete.id}`)
+
+        const blogsAfterDeletion = await blogHelper.blogsInDb()
+
+        expect(blogsAfterDeletion).toHaveLength(blogsBeforeDeletion.length - 1)
+    })
 })
 
 afterAll(() => {
