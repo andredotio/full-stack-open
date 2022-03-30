@@ -9,14 +9,10 @@ const api = supertest(app)
 beforeEach(async () => {
     await Blog.deleteMany({})
 
-    let blog = new Blog(blogHelper.initialBlogs[0])
-    await blog.save()
-
-    blog = new Blog(blogHelper.initialBlogs[1])
-    await blog.save()
-
-    blog = new Blog(blogHelper.initialBlogs[2])
-    await blog.save()
+    for (let blog of blogHelper.initialBlogs) {
+        let blogObject = new Blog(blog)
+        await blogObject.save()
+    }
 })
 
 describe('GET /', () => {
