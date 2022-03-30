@@ -49,7 +49,30 @@ describe('GET /:id', () => {
 })
 
 describe('POST /', () => {
-    // todo
+
+    test('returns a 201 status code when a new blog is successfully created', async () => {
+        const response = await api.post('/api/blogs').send({
+            title: 'newTitle',
+            author: 'newAuthor',
+            url: 'newUrl',
+            likes: 5
+        })
+
+        expect(response.statusCode).toBe(201)
+    })
+
+    test('total number of blogs in the database is increased by 1', async () => {
+        await api.post('/api/blogs').send({
+            title: 'newTitle',
+            author: 'newAuthor',
+            url: 'newUrl',
+            likes: 5
+        })
+
+        const currentBlogs = await blogHelper.blogsInDb()
+
+        expect(currentBlogs).toHaveLength(blogHelper.initialBlogs.length + 1)
+    })
 })
 
 describe('PUT /:id', () => {
