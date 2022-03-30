@@ -73,6 +73,18 @@ describe('POST /', () => {
 
         expect(currentBlogs).toHaveLength(blogHelper.initialBlogs.length + 1)
     })
+
+    test('"likes" property defaults to 0 if missing', async () => {
+        const response = await api.post('/api/blogs').send({
+            title: 'newTitle',
+            author: 'newAuthor',
+            url: 'newUrl'
+        })
+
+        const blog = response.body
+
+        expect(blog.likes).toBe(0)
+    })
 })
 
 describe('PUT /:id', () => {

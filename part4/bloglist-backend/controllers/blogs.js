@@ -26,7 +26,11 @@ blogsRouter.post('/', async (req, res, next) => {
         url: req.body.url,
         likes: req.body.likes
     })
-    
+
+    if (!newBlog.likes) {
+        newBlog.likes = 0
+    }
+
     const blog = await newBlog.save()
 
     res.status(201).json(blog)
