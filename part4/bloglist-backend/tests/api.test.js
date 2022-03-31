@@ -3,7 +3,6 @@ const supertest = require('supertest')
 const blogHelper = require('../tests/testHelper')
 const app = require('../app')
 const Blog = require('../models/blog')
-const blog = require('../models/blog')
 
 const api = supertest(app)
 
@@ -95,10 +94,34 @@ describe('POST /', () => {
 })
 
 describe('PUT /:id', () => {
-    // todo
+    
+    test('returns a 200 status code when the "likes" of a blog are successfully updated', async () => {
+        const currentBlogs = await blogHelper.blogsInDb()
+        const blogToUpdate = currentBlogs[0]
+
+        const newBlog = {...blogToUpdate, likes: 100}
+        
+        const response = await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog)
+
+        expect(response.statusCode).toBe(200)
+    }, 100000)
+
+    test('verifies that the "likes" of a blog have been successfully updated', async () => {
+        const blogsBeforeUpdate = await blogHelper.blogsInDb()
+        const blogToUpdate = blogsBeforeUpdate[0]
+        const newBlog = {...blogToUpdate, likes: 100}
+        
+        await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog)
+
+        const blogsAfterUpdate = await blogHelper.blogsInDb()
+        const updatedBlog = blogsAfterUpdate.filter(blog => blog.id === blogToUpdate.id)[0]
+
+        expect(updatedBlog.likes).toBe(newBlog.likes)
+    }, 100000)
 })
 
 describe('DELETE /:id', () => {
+
     test('returns a 204 status code when a blog is successfully deleted', async () => {
         const blogsBeforeDeletion = await blogHelper.blogsInDb()
         const blogToDelete = blogsBeforeDeletion[0]
@@ -106,7 +129,7 @@ describe('DELETE /:id', () => {
         const response = await api.delete(`/api/blogs/${blogToDelete.id}`)
 
         expect(response.statusCode).toBe(204)
-    })
+    }, 100000)
 
     test('total number of blogs in the database is decreased by 1', async () => {
         const blogsBeforeDeletion = await blogHelper.blogsInDb()
@@ -117,7 +140,7 @@ describe('DELETE /:id', () => {
         const blogsAfterDeletion = await blogHelper.blogsInDb()
 
         expect(blogsAfterDeletion).toHaveLength(blogsBeforeDeletion.length - 1)
-    })
+    }, 100000)
 })
 
 afterAll(() => {
