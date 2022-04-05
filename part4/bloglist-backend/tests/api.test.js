@@ -221,6 +221,50 @@ describe('testing /api/users', () => {
 
             expect(usernames).toContain('test')
         })
+
+        test('returns a 400 status code if a username already exists', async () => {
+            const usersAtStart = await blogHelper.usersInDb()
+
+            const response = await api.post('/api/users').send({
+                username: 'root',
+                name: 'Test Test',
+                password: 'testpass'
+            })
+
+            const usersAtEnd = await blogHelper.usersInDb()
+
+            expect(response.statusCode).toBe(400)
+            expect(usersAtEnd).toEqual(usersAtStart)
+
+        })
+
+        test('returns a 400 status code if the username or the password are missing', async () => {
+            const usersAtStart = await blogHelper.usersInDb()
+
+            const response = await api.post('/api/users').send({ name: 'Test test' })
+
+            const usersAtEnd = await blogHelper.usersInDb()
+
+            expect(response.statusCode).toBe(400)
+            expect(response.body.username).toBe(undefined)
+            expect(response.body.password).toBe(undefined)
+            expect(usersAtEnd).toEqual(usersAtStart)
+        })
+
+        test('returns a 400 status code if the username or the password are not at least 3 characters long', async () => {
+            const usersAtStart = await blogHelper.usersInDb()
+
+            const response = await api.post('/api/users').send({
+                username: 'te',
+                name: 'Test test',
+                password: 'te'
+            })
+
+            const usersAtEnd = await blogHelper.usersInDb()
+
+            expect(response.statusCode).toBe(400)
+            expect(usersAtEnd).toEqual(usersAtStart)
+        })
     })
 })
 
